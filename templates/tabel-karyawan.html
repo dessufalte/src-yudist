@@ -1,0 +1,62 @@
+
+<table>
+    <thead>
+        <tr>
+        {% for header in headers %}
+            <th>{{ header }}</th>
+        {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% if rows %}
+            {% for row in rows %}
+                <tr id="{{ row.0 }}">
+                <td>{{forloop.counter}}</td>
+                <td>{{ row.0 }}</td>
+                <td>{{ row.1 }}</td>
+                <td>{{ row.3 }}</td>
+                <td>{{ row.4 }}</td>
+                <td><button type="button" class="btn btn-primary btn-sm action_button" id="{{row.0}}">Pecat</button></td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr><td>Data tidak ditemukan</td></tr>
+        {% endif %}
+    </tbody>
+</table>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('.action_button');
+    
+        buttons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                // Dapatkan ID dari button yang di klik
+                const buttonId = event.target.id;
+                // Lakukan sesuatu dengan buttonId dan trId, misalnya panggil fungsi untuk menghandle klik
+                submit(buttonId);
+            });
+        });
+    });
+    
+    const submit = async (id) => {
+        try {
+
+            // console.log({
+            //     nama,harga, kategori,distributor
+            // })
+
+            const res = await fetch("/api/hapus-karyawan/", {
+                method: "DELETE",
+                body: JSON.stringify({id: id}),
+            })
+            const data = await res.json()
+            if (data) {
+                window.location.pathname = "/karyawan";
+            }
+            console.log(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
+</script>

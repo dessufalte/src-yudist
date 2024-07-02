@@ -1,0 +1,20 @@
+<table>
+    <thead>
+        <tr>
+            <th>ID Kategori</th>
+            <th>Kategori</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for cat in cats %}
+      <tr>
+          <td>{{ cat.0 }}</td>
+          <td>{{ cat.1 }}</td>  
+          <td>
+            <a href="/edit-category/{{cat.0}}/" class="btn btn-primary btn-sm action_button" id="{{cat.0}}">edit</a> 
+          </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>

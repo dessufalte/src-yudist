@@ -1,0 +1,80 @@
+{% load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Distributor</title>
+    <link rel="stylesheet" href="{%static 'additems.css'%}">
+</head>
+<body>
+    <main>
+        <div class="main-content">
+            <div class="form-container">
+                <h3>Edit Distributor</h3>
+                <div>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="input-group">
+                        <input type="hidden" id="id_distributor" name="id_distributor" required value="{{data_distributor.0}}">
+                        <label for="nama">Nama</label>
+                        <input type="text" id="nama" name="nama" required value="{{data_distributor.1}}">
+                        <label for="nama">Alamat</label>
+                        <input type="text" id="alamat" name="alamat" required value="{{data_distributor.3}}">
+                        <label for="nama">Contact</label>
+                        <input type="text" id="contact" name="contact" required value="{{data_distributor.2}}">
+                    </div>
+                    <button type="submit" class="submit-button" id="submitEdit">Edit Distributor</button>
+                    <button type="button" class="submit-button" id="submitHapus">Hapus Distributor</button>
+                    <button type="button" class="submit-button" onclick="window.location.href='/inventory';">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        const edit = document.getElementById("submitEdit")
+        const deleteButton = document.getElementById("submitHapus")
+        const submit = async () => {
+            try {
+                const id = document.getElementById("id_distributor").value;
+                const nama = document.getElementById("nama").value;
+                const alamat = document.getElementById("alamat").value;
+                const contact = document.getElementById("contact").value;                // console.log({
+                //     nama,harga, kategori,distributor
+                // })
+                const datas = {
+                    id, nama, alamat, contact
+                }
+
+                const res = await fetch("/api/edit-distributor/", {
+                    method: "POST",
+                    body: JSON.stringify(datas)
+                })
+                const data = await res.json()
+                if (data) {
+                    window.location.pathname = "/inventory";
+                }
+                console.log(data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        
+        edit.addEventListener("click", async()=>{
+            submit()
+        })
+        deleteButton.addEventListener("click", async () => {
+            const id = document.getElementById("id_distributor").value;
+            const res = await fetch("/api/hapus-distributor/", {
+                method: "DELETE",
+                body: JSON.stringify({id: id}),
+                
+            })
+            const data = await res.json()
+            if (data) {
+                window.location.pathname = "/inventory";
+            }
+            console.log(data)
+        })
+    </script>
+</body>
+</html>

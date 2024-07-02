@@ -1,0 +1,317 @@
+
+:root{
+    --light-c: #f9f9f9;
+      --light-medium-c: #76ABAE;
+      --medium-dark-c: #555;
+      --dark-c: #333;
+      --primary-c: #007bff;
+      --secondary-c: #6c757d;
+    }
+  body {
+      background-color: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+    .navbar {
+      background-color: var(--light-c);
+      box-shadow: 0 2px 4px var(--light-medium-c);
+      width: 100%;
+      z-index: 100;
+    }
+    main{
+      /* width: 100%;
+      padding: 0px;
+      transition: .3s; */
+      min-height: 88vh;
+    }
+  
+    .main-content {
+      padding: 20px 20px 20px 20px;
+      margin-left: 236px;
+      background-color: var(---light-c);
+      border-radius: 8px;
+      color: var( --dark-c);
+      flex-grow: 1;
+      overflow-y: auto;
+      transition: .3s;
+      margin-top: 20px;
+  
+      
+      /* width: 100%; */
+  
+    }
+    .footer {
+      background-color: var(--dark-c);
+      color: var(--light-medium-c);
+      padding: 20px 0;
+      text-align: center;
+    }
+    .product-image {
+      width: 100px;
+      height: auto;
+    }
+    .contex{
+      flex-direction: row;
+      display: flex;
+      padding: 0px;
+    }
+    .sidebar {
+      position: fixed;
+      z-index: 99;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      padding: 70px 20px 20px 20px;
+      margin-right: 20px;
+      background-color: #ffffff;
+      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: row;
+    }
+    .content-container {
+      display: flex;
+      flex-grow: 1;
+      margin-top: 56px;
+  
+    }
+    .sidebar-hidden {
+      transform: translateX(-250px);
+      width: 0%;
+    }
+    .content-expanded {
+      padding: 20px 20px 20px 20px;
+      margin-left: 20px;
+    }
+    .table-container{
+      display: flex;
+      flex-direction: row;
+    }
+    .table-barang-container{
+      width: 80%;
+  
+    }
+  
+    #cart-widget {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      width: 300px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin: 20px;
+  }
+  button.add-to-cart-btn {
+    background-color: var(--primary-c);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button.add-to-cart-btn:hover {
+    background-color: var(--dark-c);
+  }
+  
+  button.add-to-cart-btn:focus {
+    outline: none;
+  }
+  #cart-widget h3 {
+      margin-top: 0;
+      font-size: 1.2em;
+      color: #333;
+  }
+  
+  #selected-items {
+      list-style-type: none;
+      padding: 0;
+      margin-bottom: 10px; /* Tambahkan margin untuk memberi ruang pada tombol */
+  }
+  
+  #selected-items li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+  }
+  
+  #selected-items li:last-child {
+      border-bottom: none;
+  }
+  
+  #selected-items .btn {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+  }
+  
+  #selected-items .btn:hover {
+      background-color: #c9302c;
+  }
+  
+  #checkout-button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s;
+  }
+  
+  #checkout-button:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+  }
+  
+  #checkout-button:not(:disabled):hover {
+      background-color: #218838;
+  }
+  
+  .quantity-input {
+      width: 60px;
+      text-align: center;
+      margin-left: 10px;
+      margin-right: 10px;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1em;
+      -moz-appearance: textfield;  /* Hide the spin buttons in Firefox */
+  }
+  
+  .quantity-input::-webkit-outer-spin-button,
+  .quantity-input::-webkit-inner-spin-button {
+      -webkit-appearance: none; /* Hide the spin buttons in Chrome */
+      margin: 0;
+  }
+  
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  h6 {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+  }
+  .invoice-details {
+    margin-bottom: 20px;
+  }
+
+  tbody{
+    border-radius: 20px;
+  }
+  table{
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--medium-dark-c);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    color: white;
+
+  }
+  thead tr {
+    background-color: var(--dark-c);
+}
+thead th {
+  padding: 15px 20px;
+  text-align: left;
+  font-weight: bold;
+}
+tbody tr {
+  background-color: var(--light-c);
+  color: var(--dark-c);
+  transition: background-color 0.3s;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #efefef;
+}
+
+tbody tr:hover {
+  background-color: var(--primary-c);
+  color: white;
+}
+
+tbody td {
+  padding: 15px 20px;
+}
+  .totals {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .totals h6 {
+    margin-left: 20px;
+  }
+  .status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+  .belumbayar {
+    
+    color: #fff;
+  }
+  .sudah-lunas {
+    
+    color: #fff;
+  }
+  .heading{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+  }
+  .left-heading{
+    text-align: right;
+    width: 50%;
+    padding-top: 3px;
+  }
+  .right-heading{
+    text-align: left;
+    width: 50%;
+  }
+  .texc-l{
+    background-color: #3683ff;
+    padding: 5px;
+    width: auto;
+    display: inline-block;
+    border-radius: 5px;
+  }
+  .texc-s{
+    background-color: #ff2032;
+    padding: 5px;
+    width: auto;
+    display: inline-block;
+    border-radius: 5px;
+  }
+  .invoice-footer{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+
+  }
+  

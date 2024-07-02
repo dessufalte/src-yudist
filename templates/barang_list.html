@@ -1,0 +1,35 @@
+<!-- barang_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daftar Barang</title>
+</head>
+<body>
+    <h1>Daftar Barang</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID Barang</th>
+                <th>Nama Barang</th>
+                <th>Harga</th>
+                <th>Stock</th>
+                <th>ID Kategori</th>
+                <th>ID Distributor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for barang in barang_list %}
+            <tr>
+                <td>{{ barang.0 }}</td>
+                <td>{{ barang.1 }}</td>
+                <td>{{ barang.2 }}</td>
+                <td>{{ barang.3 }}</td>
+                <td>{{ barang.4 }}</td>
+                <td>{{ barang.5 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

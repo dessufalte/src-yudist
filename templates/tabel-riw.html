@@ -1,0 +1,60 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<table>
+    <thead>
+        <tr>
+            {% for header in headers %}
+                <th>{{ header }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% if rows %}
+            {% for row in rows %}
+                <tr id="{{ row.0 }}">
+                <td>{{ row.0 }}</td>
+                <td>{{ row.1 }}</td>
+                {% if row.6 == 'Tidak Ada (Layanan Pengguna)' %}
+                <td class="stonk">+{{ row.2 }}</td>
+                {% else %}
+                <td class="notstonk">-{{ row.2 }}</td>
+                {% endif %}
+                
+                <td>{{ row.7 }}</td>
+                {% if row.5 == False %}
+                    <td class="accept"><h6>Belum Selesai</h6></td>
+                {% else %}
+                    <td class="denny"><h6>Sudah Selesai</h6></td>
+                {% endif %}
+                <td>{{ row.6 }}</td>
+                {% if row.5 == False %}
+                <td><button type="button" class="btn btn-primary btn-sm action_button" id="{{row.0}}"  onclick="window.location.href='/detailtransaksi/{{row.0}}/';">Acc</button></td>
+                {% else %}
+                <td><button type="button" class="btn btn-primary btn-sm action_button" id="{{row.0}}"  onclick="window.location.href='/detailtransaksi/{{row.0}}/';">Detail</button></td>
+                {% endif %}
+                
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr><td>Data tidak ditemukan</td></tr>
+        {% endif %}
+    </tbody>
+</table>
+<script>
+    function accTransaction(transaksiId) {
+        $.ajax({
+            url: '/path/to/acc_transaction/',  // Ganti dengan URL endpoint Anda
+            type: 'POST',
+            data: {
+                'transaksi_id': transaksiId
+            },
+            success: function(response) {
+                // Handle response jika perlu
+                console.log('Transaction accepted successfully.');
+            },
+            error: function(error) {
+                console.error('Error accepting transaction:', error);
+            }
+        });
+    }
+    </script>
+    

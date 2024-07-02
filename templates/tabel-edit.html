@@ -1,0 +1,31 @@
+
+<table>
+    <thead>
+        <tr>
+            {% for header in headers %}
+                <th>{{ header }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% if rows %}
+            {% for row in rows %}
+                <tr id="{{ row.0 }}">
+                    {% for cell in row %}
+                        {% if forloop.last and show_buttons  %}
+                            <td><a href="/edit-item/{{row.0}}/" class="btn btn-primary btn-sm action_button" id="{{row.0}}">{{ cell }}</a></td>
+                        {% elif cell == 'edit' %}
+                            <td>
+                                <a type="button" class="btn btn-primary btn-sm action_button" id="{{row.0}}">{{ cell }}</button>
+                            </td>
+                        {% else %}
+                            <td>{{ cell }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr><td>Data tidak ditemukan</td></tr>
+        {% endif %}
+    </tbody>
+</table>

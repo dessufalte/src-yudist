@@ -1,0 +1,30 @@
+{% load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static "login.css" %}">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-form">
+            <h2>Selamat Datang</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="input-group">
+                    <label for="Username">Username</label>
+                    <input type="text" id="uname" name="uname" required>
+                </div>
+                <div class="input-group">
+                  <label for="Password">Password</label>
+                  <input type="text" id="psw" name="psw" required>
+              </div>
+                <button type="submit" class="login-button">Login</button>
+            </form>
+            <a href="/home" class="back-to-home">Kembali ke beranda</a>
+        </div>
+    </div>
+</body>
+</html>

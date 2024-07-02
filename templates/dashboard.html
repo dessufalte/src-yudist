@@ -1,0 +1,193 @@
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TOKOKU - Yudist SRC</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="{%static 'dashboard.css'%}">
+</head>
+<body>
+
+  <!-- Navbar -->
+  {% include 'nv-bar.html' %} 
+
+  <div class="container-fluid">
+    <div class="contex">
+      <!-- Sidebar -->
+      {% include 'sidebar.html' %} 
+      <!-- Main content -->
+      <main>
+        <div class="main-content">
+          <h1 class="mb-4">Selamat Datang di SRC Yudist</h1>
+          <p>Selamat datang di SRC Yudist, tempat di mana segala kebutuhan sehari-hari Anda tersedia lengkap. Kami siap membantu Anda memenuhi kebutuhan sehari-hari dengan pilihan produk terbaik dan layanan terbaik. 
+          </p>
+          
+          <div class="table-container">
+            <div class="table-barang-container">
+              <h2 class="mt-4">Produk</h2>
+              <form method="get" action="{% url 'search_items' %}">
+                <div class="searchbar">
+                    <input class="searchfield" type="text" id="search" name="search" value="{{ request.GET.search }}">
+                    <select id="cat" name="cat" class="cat">
+                      <option value="" disabled selected>category...</option>
+                      {% for cat in data_cat %}
+                      <option value="{{ cat.1 }}" {% if cat == request.GET.cat %}selected{% endif %}>{{ cat.1 }}</option>
+                      {% endfor %}
+                    </select>
+                    <button class="searchbutton" type="submit">Search</button>
+                </div>
+              </form>
+              {% include 'tabel-das.html' %} 
+            {% comment %} <table class="table">
+              
+              <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Gambar</th>
+                    <th scope="col">Nama</th>
+                    <th scope="col">Distributor</th>
+                    <th scope="col">Harga</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+              <tbody>
+                {% for barang in data_barang %}
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td><img src="https://placehold.co/100x100" alt="Product 3 Image" class="product-image"></td>
+                  <td>{{ barang.1 }}</td>
+                  <td>{{ barang.5 }}</td>
+                  <td>{{ barang.4 }}</td>
+                  <td><button type="button" class="add-to-cart-btn"
+                    data-barang-id="{{ barang.1 }}">Keranjang</button></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table> {% endcomment %}
+          </div>
+            <div id="cart-widget">
+              <h4>Keranjang Belanja</h4>
+              <ul id="selected-items"></ul>
+              <form id="checkout-form" action="/checkout" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="cart-data" name="cart_data" value="">
+                <button type="button" id="checkout-button" disabled>Check Out</button>
+            </form>
+            </div>
+          </div>
+          <!-- Product table -->
+          
+          
+        </div>
+        <!-- Widget untuk menampilkan barang yang dipilih -->
+<!-- Script JavaScript untuk menangani tombol "Add to Cart" dan menampilkan barang yang dipilih -->
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  {% include 'footer.html' %} 
+  <script>
+    document.getElementById('checkout-button').addEventListener('click', function() {
+        var items = document.getElementById('selected-items').getElementsByTagName('li');
+        var itemList = [];
+    
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var barangId = item.id;
+            var jumlah = item.querySelector('.quantity-input').value;  // Mengambil nilai dari input number
+    
+            itemList.push({
+                id: barangId,
+                jumlah: jumlah
+            });  // Menambahkan id dan jumlah ke dalam itemList
+        }
+    
+        document.getElementById('cart-data').value = JSON.stringify(itemList);
+        document.getElementById('checkout-form').submit();
+    });
+    
+    // Mengaktifkan tombol checkout ketika ada item di keranjang
+    var observer = new MutationObserver(function(mutations) {
+        var items = document.getElementById('selected-items').getElementsByTagName('li').length;
+        document.getElementById('checkout-button').disabled = items === 0;
+    });
+    
+    observer.observe(document.getElementById('selected-items'), { childList: true });
+    </script>
+    
+    
+    
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-XvfErk3hSx9NOFALxEL9Y/WlO1pP4AbZkk7Jp3li/Nsk9xfHYZ1JscLYF6Zx5r5b" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const addToCartButtons = document.querySelectorAll('.action_button');
+      const selectedItems = new Map();  // Gunakan Map untuk menyimpan jumlah barang yang dipilih
+      const checkoutButton = document.getElementById('checkout-button');
+  
+      addToCartButtons.forEach(button => {
+          button.addEventListener('click', function() {
+              const barangId = this.getAttribute('id');
+              let jumlah = selectedItems.get(barangId) || 0;
+              jumlah++;
+              selectedItems.set(barangId, jumlah);
+              console.log(`Barang dengan ID ${barangId} ditambahkan ke keranjang (${jumlah} barang)`);
+              updateCartWidget();  // Panggil fungsi untuk memperbarui widget
+          });
+      });
+  
+      // Fungsi untuk memperbarui widget dengan barang-barang yang dipilih
+      function updateCartWidget() {
+          const selectedItemsElement = document.getElementById('selected-items');
+          selectedItemsElement.innerHTML = '';  // Kosongkan elemen terlebih dahulu
+  
+          selectedItems.forEach((jumlah, barangId) => {
+              const listItem = document.createElement('li');
+              listItem.id = `${barangId}`;
+              listItem.innerHTML = `
+                  <span>${barangId}: </span>
+                  <input type="number" class="quantity-input" min="1" value="${jumlah}" />
+                  <button class="btn btn-danger btn-sm ml-2">Hapus</button>
+              `;
+              // Tambahkan event listener untuk input jumlah
+              listItem.querySelector('.quantity-input').addEventListener('input', function() {
+                  const newJumlah = parseInt(this.value);
+                  if (newJumlah > 0) {
+                      selectedItems.set(barangId, newJumlah);
+                  } else {
+                      selectedItems.delete(barangId);
+                  }
+                  console.log(`Barang dengan ID ${barangId} diperbarui di keranjang (${newJumlah} barang)`);
+                  updateCartWidget();  // Panggil fungsi untuk memperbarui widget
+              });
+  
+              // Tambahkan event listener untuk tombol hapus
+              listItem.querySelector('button').addEventListener('click', function() {
+                  selectedItems.delete(barangId);
+                  console.log(`Barang dengan ID ${barangId} dihapus dari keranjang`);
+                  updateCartWidget();  // Panggil fungsi untuk memperbarui widget setelah menghapus barang
+              });
+  
+              selectedItemsElement.appendChild(listItem);
+          });
+  
+          // Update status tombol "Check Out"
+          if (selectedItems.size > 0) {
+              checkoutButton.disabled = false;
+          } else {
+              checkoutButton.disabled = true;
+          }
+      }
+  });
+  
+    document.getElementById('sidebarToggle').addEventListener('click', function() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.querySelector('.main-content');
+      sidebar.classList.toggle('sidebar-hidden');
+      mainContent.classList.toggle('content-expanded');
+    });
+    </script>
+</body>
+</html>

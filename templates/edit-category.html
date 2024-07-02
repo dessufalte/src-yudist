@@ -1,0 +1,75 @@
+{% load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Kategori</title>
+    <link rel="stylesheet" href="{%static 'additems.css'%}">
+</head>
+<body>
+    <main>
+        <div class="main-content">
+            <div class="form-container">
+                <h3>Edit Kategori</h3>
+                <div>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="input-group">
+                        <input type="hidden" id="id_cat" name="id_cat" required value="{{data_category.0}}">
+                        <label for="nama">Nama</label>
+                        <input type="text" id="cat" name="nama" required value="{{ data_category.1 }}">
+                    </div>
+                    <button type="submit" class="submit-button" id="submitEdit">Edit Barang</button>
+                    <button type="button" class="submit-button" id="submitHapus">Hapus Barang</button>
+                    <button type="button" class="submit-button" onclick="window.location.href='/inventory';">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        const edit = document.getElementById("submitEdit")
+        const deleteButton = document.getElementById("submitHapus")
+        const submit = async () => {
+            try {
+                const id = document.getElementById("id_cat").value;
+                const cat = document.getElementById("cat").value;
+                // console.log({
+                //     nama,harga, kategori,distributor
+                // })
+                const datas = {
+                    id, cat
+                }
+
+                const res = await fetch("/api/edit-category/", {
+                    method: "POST",
+                    body: JSON.stringify(datas)
+                })
+                const data = await res.json()
+                if (data) {
+                    window.location.pathname = "/inventory";
+                }
+                console.log(data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        
+        edit.addEventListener("click", async()=>{
+            submit()
+        })
+        deleteButton.addEventListener("click", async () => {
+            const id = document.getElementById("id_cat").value;
+            const res = await fetch("/api/hapus-cat/", {
+                method: "DELETE",
+                body: JSON.stringify({id: id}),
+                
+            })
+            const data = await res.json()
+            if (data) {
+                window.location.pathname = "/inventory";
+            }
+            console.log(data)
+        })
+    </script>
+</body>
+</html>

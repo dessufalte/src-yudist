@@ -1,0 +1,24 @@
+<table>
+    <thead>
+        <tr>
+            <th>ID Distributor</th>
+            <th>Nama Distributor</th>
+            <th>Alamat</th>
+            <th>Kontak</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for distrib in data_d %}
+      <tr>
+          <td>{{ distrib.0 }}</td>
+          <td>{{ distrib.1 }}</td>  
+          <td>{{ distrib.2 }}</td>  
+          <td>{{ distrib.3 }}</td>  
+          <td>
+            <a href="/edit-distributor/{{distrib.0}}/" class="btn btn-primary btn-sm action_button" id="{{distrib.0}}">edit</a> 
+          </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>

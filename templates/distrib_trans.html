@@ -1,0 +1,233 @@
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{show_Nama}} - Yudist SRC </title>
+  <link rel="icon" href="{%static 'favicon.png'%}" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="{%static 'distrib_trans.css'%}">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  {% include 'nv-bar.html' %}
+  <div class="container-fluid">
+    <div class="contex">
+      <!-- Sidebar -->
+      {% include 'sidebar.html' %}
+      <main>
+        <div class="main-content">
+          <h2>Distributor Transaksi</h2>
+          <div class="container">
+            <ul>
+              <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <li>Pilih nama distributor</li>
+                <select class="distrib_menu" id="distrib" name="distrib">
+                  <option value="dgfdg" disabled>Pilih distributor</option>
+                  {% for data in distributor %}
+                  <option value="{{ data.0 }}">{{ data.1 }}</option>
+                  {% endfor %}
+                </select>
+                <div class="headerPilBar">
+                  <li>Pilih barang </li>
+                  <button id="tambahBarang">Tambah Barang</button>
+                </div>
+                <div id="pilihBarang">
+                  <div class="itemhead">
+                    <div class="headingPilihBarang">Nama barang</div>
+                    <div class="headingPilihBarang">Jumlah</div>
+                    <div class="headingPilihBarang">Harga Satuan</div>
+                    <div class="headingPilihBarang">Aksi</div>
+                  </div>
+                  <!-- <div class="item">
+                  <div class="item2">
+                    <select name="pil_bar" id="barang" value="">
+                      <option value="">Pilih Barang</option>
+                    </select>
+                  </div>
+                  <div class="item2">
+                    <input type="number" class="number" name="stock" min="1" id="stock">
+                  </div>
+                  <div class="item2 button">
+                    <button class="btn btn-primary btn-sm">Hapus</button>
+                  </div>
+                </div> -->
+
+                </div>
+                <button type="submit" id="submitTransaksi" onclick="" class="btn btn-primary btn-sm">Lakukan Transaksi</button>
+              </form>
+            </ul>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  {% include 'footer.html' %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-XvfErk3hSx9NOFALxEL9Y/WlO1pP4AbZkk7Jp3li/Nsk9xfHYZ1JscLYF6Zx5r5b"
+    crossorigin="anonymous"></script>
+  <script>
+    document.getElementById('sidebarToggle').addEventListener('click', function () {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.querySelector('.main-content');
+      sidebar.classList.toggle('sidebar-hidden');
+      mainContent.classList.toggle('content-expanded');
+    });
+    const test = document.getElementById("test")
+    const button = document.getElementById("submitTransaksi")
+
+    const pilihBarang = document.getElementById("pilihBarang")
+    const pilihBarangItem = document.querySelectorAll("#pilihBarang .item")
+    const distrib = document.getElementById("distrib")
+    const barang = document.querySelectorAll("#pilihBarang .item .barang")
+    const tambahBarang = document.getElementById("tambahBarang")
+    var hapus = document.querySelectorAll("pilihBarang .item #hapus")
+    let keranjang = []
+
+
+
+    const getBarangByDistributor = async () => {
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      console.log(distrib.value)
+
+      const res = await fetch(`/data-barang-by-distrib/${distrib.value}/`, {  // Tambahkan '/' di akhir 'test-post'
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        }
+      })
+      const response = await res.json();
+      const looping = barang.length;
+      const barang2 = document.querySelectorAll("#pilihBarang .item .barang")
+      console.log(barang[0], "ïni")
+      barang2.forEach((item, i) => {
+        barang2[i].innerHTML = ""
+        response.data.forEach((item2) => {
+          barang2[i].innerHTML += `<option value="${item2[0]}">${item2[0]}</option>`
+        })
+      })
+
+      console.log(response, "Oiii", csrfToken, distrib.value);
+    }
+
+    distrib.addEventListener("change", async () => {
+      getBarangByDistributor()
+    })
+    const hapusBarang = (e) => {
+      const pilihBarang = document.getElementById("pilihBarang");
+      const pilihBarangItem = document.querySelectorAll("#pilihBarang .item");
+      let data = document.createElement("div");
+      data.id = "pilihBarang";
+      data.innerHTML = `
+    <div class="itemhead">
+      <div class="headingPilihBarang">Nama barang</div>
+      <div class="headingPilihBarang">Stock</div>
+      <div class="headingPilihBarang">Harga Satuan</div>
+      <div class="headingPilihBarang">Aksi</div>
+    </div>`;
+
+      pilihBarangItem.forEach((item, i) => {
+        if (item.classList[1] === e.closest(".item").classList[1]) {
+          item.remove()
+        }
+      });
+    }
+    let no = 0;
+    tambahBarang.addEventListener("click", async () => {
+      event.preventDefault();
+      const pilihBarang = document.getElementById("pilihBarang")
+      const add = `<div class="item no${no + 1}">
+                  <div class="item2">
+                    <select name="pil_bar" class="barang" value="">
+                      <option value="">Pilih Barang</option>
+                    </select>
+                  </div>
+                  <div class="item2">
+                    <input type="number" class="number" name="stock" min="1" id="stock" value="1">
+                  </div>
+                  <div class="item2">
+                    <input type="number" class="number" name="harga" min="1" id="harga" placeholder="default">
+                  </div>
+                  <div class="item2 button">
+                    <button id="hapus" class="btn btn-primary btn-sm" onclick="hapusBarang(this)">Hapus</button>
+                  </div>
+                </div>`;
+      no = no + 1;
+      // const pilihBarang = document.getElementById('pilihBarang');
+      const panjangSebelum = document.querySelectorAll('#pilihBarang .item').length;
+      pilihBarang.insertAdjacentHTML("beforeend",add)
+      
+      const panjangSesudah = document.querySelectorAll('#pilihBarang .item').length;
+
+      if (panjangSesudah > panjangSebelum) {
+        const pilihBarangItem = document.querySelectorAll('#pilihBarang .item');
+        await getBarangByDistributor();
+      } else {
+        console.log("Tidak ada penambahan elemen.");
+      }
+    })
+
+    document.addEventListener("DOMContentLoaded", () => {
+      getBarangByDistributor();
+    });
+
+    // const sendDataToDistribCheckout = async () => {
+    //   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    //   const distrib = document.getElementById('distrib');
+    //   const distribValue = distrib.value;
+
+    //   const items = document.querySelectorAll("#pilihBarang .item");
+    //   const dataBarang = Array.from(items).map(item => {
+    //     const barang = item.querySelector('.barang').value;
+    //     const stock = item.querySelector('.number').value;
+    //     return { barang, stock };
+    //   });
+
+    //   const dataToSend = {
+    //     distrib: distribValue,
+    //     items: dataBarang
+    //   };
+
+    //   try {
+    //     const res = await fetch(`/distrib_checkout/`, {
+    //       method: "POST",
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'X-CSRFToken': csrfToken
+    //       },
+    //       body: JSON.stringify(dataToSend)
+    //     });
+
+    //     const response = await res.json();
+    //     console.log('Checkout Response:', response);
+    //     alert('transaksi terkirim');
+    //   } catch (error) {
+    //     console.error('Error:', error);
+    //   }
+    // };
+    // document.getElementById('submitTransaksi').addEventListener('click', sendDataToDistribCheckout);
+    // button.addEventListener("click", () => {
+    //   variabel.forEach((item) => {
+    //     const data = `
+    //     <p>${item.nama}</p>
+    //   `
+    //     test.innerHTML = test.innerHTML + data
+    //   })
+    // })
+
+  </script>
+</body>
+
+</html>

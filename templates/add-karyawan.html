@@ -1,0 +1,71 @@
+{% load static%}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Karyawan</title>
+    <link rel="stylesheet" href="{%static 'additems.css'%}">
+</head>
+
+<body>
+    <main>
+        <div class="main-content">
+            <div class="form-container">
+                <h3>Tambah Karyawan</h3>
+                <div>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="input-group">
+                        <label for="nama">Nama</label>
+                        <input type="text" id="nama" name="nama" required >
+                    </div>
+                    <div class="input-group">
+                        <label for="harga">Level</label>
+                        <input type="Number" id="level" name="level" required >
+                    </div>
+                    <div class="input-group">
+                        <label for="harga">password</label>
+                        <input type="password" id="pass" name="pass" required >
+                    </div>
+                    <button class="submit-button" id="addKaryawan">Tambah Karyawan</button>
+                    <button class="submit-button" onclick="window.location.href='/karyawan';">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        const addButton = document.getElementById("addKaryawan")
+        const submit = async () => {
+            try {
+                const nama = document.getElementById("nama").value;
+                const level = document.getElementById("level").value;
+                const pass = document.getElementById("pass").value;
+                // console.log({
+                //     nama,harga, kategori,distributor
+                // })
+                const datas = {
+                    nama, level, pass
+                }
+
+                const res = await fetch("/api/add-karyawan/", {
+                    method: "POST",
+                    body: JSON.stringify(datas)
+                })
+                const data = await res.json()
+                if (data) {
+                    window.location.pathname = "/karyawan";
+                }
+                console.log(data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        
+        addButton.addEventListener("click", async()=>{
+            submit()
+        })
+    </script>
+</body>
+
+</html>

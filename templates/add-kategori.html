@@ -1,0 +1,28 @@
+{% load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Kategori</title>
+    <link rel="stylesheet" href="{%static 'additems.css'%}">
+</head>
+<body>
+    <main>
+        <div class="main-content">
+            <div class="form-container">
+                <h3>Tambah Kategori</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="input-group">
+                        <label for="nama">Nama</label>
+                        <input type="text" id="nama" name="nama" required>
+                    </div>
+                    <button type="submit" class="submit-button">Tambah Kategori</button>
+                    <button type="button" class="submit-button" onclick="window.location.href='/inventory';">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
